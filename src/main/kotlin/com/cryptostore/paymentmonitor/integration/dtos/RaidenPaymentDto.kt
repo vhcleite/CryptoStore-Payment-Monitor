@@ -8,7 +8,7 @@ data class RaidenPaymentDto(
         var paymentEvent: RaidenPaymentEvent,
 
         @JsonProperty("amount")
-        var amount: Int,
+        var amount: String?,
 
         @JsonProperty("initiator")
         var initiator: String?,

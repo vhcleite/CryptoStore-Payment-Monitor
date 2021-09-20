@@ -21,7 +21,7 @@ class PaymentMonitor {
     @Autowired
     lateinit var purchaseService: PurchaseService
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 1000)
     fun reportTime() {
         logger.info("The time is now ${DateTimeFormatter.ISO_LOCAL_TIME.format(LocalDateTime.now())}")
 
@@ -31,10 +31,10 @@ class PaymentMonitor {
         //consultar os pagamentos feitos no raiden
         val paymentIds = paymentService.getPayments()
                 .filter {pa -> pa.paymentEvent == RaidenPaymentEvent.EventPaymentReceivedSuccess}
-                .map { pa -> pa.identifier?.toLong() }
+                .map { pa -> pa.identifier }
 
         // filtra compras pagas
-        val purchasesToUpdate = purchases?.filter { pu -> paymentIds.contains(pu.purchaseId) }
+        val purchasesToUpdate = purchases?.filter { pu -> paymentIds.contains(pu.purchaseId.toString()) }
 
         //atualizar os pagamentos novos
         purchasesToUpdate?.forEach { purchase ->
